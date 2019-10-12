@@ -9,19 +9,25 @@
             <p><b>Jun & undefined</b></p>
             <p>时间：invalid date value</p>
             <p>地点：<b>location can not be found</b></p>
+<!--            @focus="isFocused = true"-->
             <input
               class="content-inside-input"
-              placeholder="轻触写下祝福，按回车发送" 
-              @keyup.enter="sendBarrage"
-              @focus="isFocused = true"
-              @blur="isFocused = false, hasEntered = false"
+              placeholder="写下你的祝福"
+              @focus="isFocused = false"
+              @blur="isFocused = false"
               v-model="wish"
               ref="wishInput"
             >
-            <p v-if="!wish && isFocused && hasEntered">请输入祝福哦</p>
+            <p v-if="!wish && isFocused">请输入祝福哦</p>
+            <div class="send-barrage">
+              <p @click="sendBarrage">发送祝福弹幕</p>
+              <p @click="close">关闭</p>
+            </div>
           </div>
         </div>
-        <div class="cover-inside-left" :class="{'opening':isOpening}"></div>
+        <div class="cover-inside-left" :class="{'opening':isOpening}">
+          <div class="cover-inside-left-title">我们结婚啦！</div>
+        </div>
         <div class="cover-inside-right" :class="{'opening':isOpening}"></div>
         <img class="cover-inside-seal" src="../images/seal.png" @click="openInvitation" :class="{'invitation-flight':isOpening}">
       </div>
@@ -36,8 +42,7 @@ export default {
     return {
       isOpening: false,
       wish: '',
-      isFocused: false,
-      hasEntered: false
+      isFocused: false
     }
   },
   methods: {
@@ -48,8 +53,8 @@ export default {
     // 发送弹幕
     sendBarrage(){
       this.$nextTick(() => {
-        this.hasEntered = true
         if (!this.wish) {
+          this.isFocused = true
           return
         }
         this.isOpening = false
@@ -58,6 +63,15 @@ export default {
           this.$emit('sendBarrage', this.wish)
         }, 660)
       })
+    },
+    // 关闭
+    close() {
+      this.isFocused = false
+      this.isOpening = false
+      this.$refs.wishInput.blur()
+      setTimeout(() => {
+        this.$emit('sendBarrage', this.wish)
+      }, 660)
     }
   }
 }
@@ -149,6 +163,23 @@ export default {
               &:-ms-input-placeholder { color: #E8D1B1;font-size: 12px; }
               &:-moz-placeholder { color: #E8D1B1;font-size: 12px; }
             }
+            .send-barrage {
+              display: flex;
+              align-items: center;
+              height: 40px;
+              line-height: 40px;
+              width: 100%;
+              margin-top: 10px;
+              > p:first-child {
+                background: #F7DEBB;
+                flex: 1;
+              }
+              > p:last-child {
+                border: 1px solid #F7DEBB;
+                width: 60px;
+                margin-left: 10px;
+              }
+            }
           }
         }
         .cover-inside-left{
@@ -168,6 +199,20 @@ export default {
           &.opening{
             transform: rotate3d(0,1,0,-140deg);
             -webkit-transform: rotate3d(0,1,0,-140deg);
+          }
+          .cover-inside-left-title {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            width: 28px;
+            padding: 5px 0;
+            text-align: center;
+            letter-spacing: 3px;
+            font-family: serif;
+            writing-mode: vertical-rl;
+            color: #a9885d;
+            background: #fff1de;
+            border: 3px solid #ffd69b;
           }
         }
         .cover-inside-right{

@@ -1,5 +1,5 @@
 export default {
-  code: 
+  code:
 `
 // 今天心情好
 // 我给你表演写代码

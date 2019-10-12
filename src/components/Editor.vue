@@ -14,6 +14,7 @@
     <Executions :canExecute="canExecute" @onUpdating="scrollToBottom" @onFinish="canOpen = true"/>
     <invitation :canOpen="canOpen" @sendBarrage="onAfterSending"/>
     <Barrage :wish="wish" :canStart="canStart"/>
+    <p class="open-barrage" v-if="!canOpen && isOpenStatus" @click="canOpen = true"><img src="../images/barrage.png" alt=""></p>
   </div>
 </template>
 
@@ -38,8 +39,10 @@
         isCursorVisible: 1,
         canExecute: false,
         canOpen: false,
+        // canOpen: true,
         wish: '',
-        canStart: false
+        canStart: false,
+        isOpenStatus: false
       }
     },
     created() {
@@ -94,11 +97,17 @@
       },
       // 发送弹幕之后
       onAfterSending(wish) {
-        this.wish = wish
-        this.canOpen = false
-        setTimeout(() => {
-          this.canStart = true
-        }, 800)
+          console.log(wish)
+          this.isOpenStatus = true
+          if (!wish) {
+              this.canOpen = false
+              return
+          }
+          this.wish = wish
+          this.canOpen = false
+          setTimeout(() => {
+            this.canStart = true
+          }, 800)
       }
     }
   }
@@ -141,7 +150,7 @@
         background: #FDBC40;
       }
       &.maximum{
-        background: #34C84A;
+        background: #0078D7;
       }
     }
   }
@@ -167,6 +176,25 @@
       font-weight: 500 !important;
       background: transparent;
     }
+  }
+  .open-barrage {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 40px;
+      height: 40px;
+      padding: 6px;
+      border-radius: 20px;
+      text-align: center;
+      line-height: 18px;
+      border: 5px solid #ffd69b;
+      color: #a9895d;
+      background: #FFF1DE;
+      z-index: 1000;
+      img {
+          width: 25px;
+          height: auto;
+      }
   }
 }
 </style>
