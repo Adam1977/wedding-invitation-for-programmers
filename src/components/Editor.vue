@@ -180,7 +180,7 @@
   .open-barrage {
       position: fixed;
       right: 20px;
-      bottom: 20px;
+      bottom: 10px;
       width: 40px;
       height: 40px;
       padding: 6px;
